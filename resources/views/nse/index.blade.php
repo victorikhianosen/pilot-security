@@ -1,0 +1,238 @@
+@extends('layouts.admin.app')
+
+@section('admin_content')
+    <main class="flex-grow p-6">
+
+        <!-- Page Title Start -->
+        <div class="flex justify-between items-center mb-6">
+            <h4 class="text-slate-900 dark:text-slate-200 text-lg font-medium">NSE List</h4>
+            <div>
+                <button class="btn bg-primary text-white" data-fc-target="default-modal" data-fc-type="modal" type="button">
+                    Add
+                </button>
+            </div>
+        </div>
+
+
+
+        <div class="mt-12 overflow-x-auto">
+            <table class="min-w-full bg-white">
+                <thead class="bg-gray-800 text-white whitespace-nowrap">
+                    <tr>
+                        <th class="p-4 text-left text-sm font-medium">S/N</th>
+                        <th class="p-4 text-left text-sm font-medium">Company</th>
+                        <th class="p-4 text-left text-sm font-medium">Pclose</th>
+                        <th class="p-4 text-left text-sm font-medium">Open</th>
+                        <th class="p-4 text-left text-sm font-medium">Close</th>
+                        <th class="p-4 text-left text-sm font-medium">Change</th>
+                        <th class="p-4 text-left text-sm font-medium">% Change</th>
+                        <th class="p-4 text-left text-sm font-medium">High</th>
+                        <th class="p-4 text-left text-sm font-medium">Low</th>
+                        <th class="p-4 text-left text-sm font-medium">Trades</th>
+                        <th class="p-4 text-left text-sm font-medium">Volume</th>
+                        <th class="p-4 text-left text-sm font-medium">Value</th>
+                        {{-- <th class="p-4 text-left text-sm font-medium">Action</th> --}}
+
+                    </tr>
+                </thead>
+                <tbody class="whitespace-nowrap">
+                    @forelse ($nsePrices as $price)
+                        <tr class="even:bg-blue-50">
+                            <td class="p-4">
+                                {{ ($nsePrices->currentPage() - 1) * $nsePrices->perPage() + $loop->iteration }}
+                            </td>
+                            <td class="p-4">{{ $price->company }}</td>
+                            <td class="p-4">{{ $price->pclose }}</td>
+                            <td class="p-4">{{ $price->open }}</td>
+                            <td class="p-4">{{ $price->close }}</td>
+                            <td class="p-4">{{ $price->change }}</td>
+                            <td class="p-4">{{ $price->percent_change }}</td>
+                            <td class="p-4">{{ $price->high }}</td>
+                            <td class="p-4">{{ $price->low }}</td>
+                            <td class="p-4">{{ $price->trades }}</td>
+                            <td class="p-4">{{ $price->volume }}</td>
+                            <td class="p-4">{{ $price->value }}</td>
+                            {{-- <td class="" style="color: blue">
+                                <button class="cursor-pointer">Edit</button>
+                            </td> --}}
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="12" class="p-4 text-center">No records found.</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+
+            <div class="mt-6 flex justify-between items-center px-4">
+                {{-- Total Count on Left --}}
+                <div class="text-sm text-gray-600">
+                    Showing
+                    <span class="font-medium">
+                        {{ ($nsePrices->currentPage() - 1) * $nsePrices->perPage() + 1 }}
+                    </span>
+                    to
+                    <span class="font-medium">
+                        {{ ($nsePrices->currentPage() - 1) * $nsePrices->perPage() + $nsePrices->count() }}
+                    </span>
+                    of
+                    <span class="font-medium">
+                        {{ $nsePrices->total() }}
+                    </span>
+                    results
+                </div>
+
+                {{-- Previous and Next on Right --}}
+                <div class="flex space-x-2">
+                    @if ($nsePrices->onFirstPage())
+                        <span class="px-4 py-2 bg-gray-200 text-gray-500 rounded cursor-not-allowed">Previous</span>
+                    @else
+                        <a href="{{ $nsePrices->previousPageUrl() }}"
+                            class="px-4 py-2 bg-gray-800 text-white rounded hover:bg-gray-700 transition">
+                            Previous
+                        </a>
+                    @endif
+
+                    @if ($nsePrices->hasMorePages())
+                        <a href="{{ $nsePrices->nextPageUrl() }}"
+                            class="px-4 py-2 bg-gray-800 text-white rounded hover:bg-gray-700 transition">
+                            Next
+                        </a>
+                    @else
+                        <span class="px-4 py-2 bg-gray-200 text-gray-500 rounded cursor-not-allowed">Next</span>
+                    @endif
+                </div>
+            </div>
+
+
+
+        </div>
+
+
+
+
+        <!-- Modal -->
+        <div id="default-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden"
+            data-fc-backdrop="static">
+            <div
+                class="fc-modal-open:opacity-100 duration-500 opacity-0 ease-out transition-all sm:max-w-lg sm:w-full m-3 sm:mx-auto flex flex-col bg-white border shadow-sm rounded-md dark:bg-slate-800 dark:border-gray-700">
+
+                <div class="flex justify-between items-center py-2.5 px-4 border-b dark:border-gray-700">
+                    <h3 class="font-medium text-gray-800 dark:text-white text-lg">Add NSE</h3>
+                    <button class="inline-flex flex-shrink-0 justify-center items-center h-8 w-8 dark:text-gray-200"
+                        data-fc-dismiss type="button">
+                        <span class="material-symbols-rounded">close</span>
+                    </button>
+                </div>
+
+                <form action="{{ route('admin.upload.pricing') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="px-4 py-8 overflow-y-auto">
+
+                        <div id="uploadArea" class="flex items-center justify-center w-full">
+                            <label for="fileUpload"
+                                class="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:bg-slate-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-slate-600 transition">
+                                <div id="uploadContent" class="flex flex-col items-center justify-center pt-5 pb-6">
+                                    <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-300" fill="none"
+                                        stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M7 16V4m0 0L3 8m4-4l4 4M17 8v12m0 0l4-4m-4 4l-4-4" />
+                                    </svg>
+                                    <p class="mb-2 text-sm text-gray-500 dark:text-gray-300">
+                                        <span class="font-semibold">Click to upload</span> or drag and drop
+                                    </p>
+                                    <p class="text-xs text-gray-500 dark:text-gray-300">PDF, Excel, Word, Images up to 10MB
+                                    </p>
+                                </div>
+                                <input id="fileUpload" name="nse" type="file" accept=".xls,.xlsx" class="hidden" />
+                            </label>
+                        </div>
+
+                    </div>
+
+                    <div class="flex justify-end items-center gap-4 p-4 border-t dark:border-slate-700">
+                        <button
+                            class="btn border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700"
+                            data-fc-dismiss type="button">Close</button>
+                        <button type="submit" class="btn bg-primary text-white">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- File upload JS -->
+        <script>
+            const fileInput = document.getElementById('fileUpload');
+            const uploadContent = document.getElementById('uploadContent');
+
+            // Prevent modal from closing on file input interactions
+            fileInput.addEventListener('click', function(event) {
+                event.stopPropagation();
+            });
+
+            fileInput.addEventListener('change', function(event) {
+                const file = event.target.files[0];
+                if (!file) return;
+
+                const fileType = file.type;
+                const fileName = file.name;
+
+                if (fileType.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        uploadContent.innerHTML = `
+                        <img src="${e.target.result}" alt="Preview"
+                            class="max-h-40 rounded shadow border border-gray-300 object-contain" />
+                        <button id="changeFileButton" type="button"
+                            class="mt-3 px-3 py-1 text-xs bg-blue-600 text-white rounded hover:bg-blue-700 transition">
+                            Change File
+                        </button>
+                    `;
+                        attachChangeButton();
+                    }
+                    reader.readAsDataURL(file);
+                } else {
+                    const iconSVG = `
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-gray-500 dark:text-gray-300" fill="none"
+                         viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M4 16v1a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-1M4 12l1.293-1.293a1 1 0 0 1 1.414 0L12 16l5.293-5.293a1 1 0 0 1 1.414 0L20 12"/>
+                    </svg>
+                `;
+
+                    uploadContent.innerHTML = `
+                    ${iconSVG}
+                    <p class="mt-2 text-sm text-gray-700 dark:text-gray-300 text-center truncate max-w-[200px]">${fileName}</p>
+                    <button id="changeFileButton" type="button"
+                        class="mt-3 px-3 py-1 text-xs bg-blue-600 text-white rounded hover:bg-blue-700 transition">
+                        Change File
+                    </button>
+                `;
+                    attachChangeButton();
+                }
+            });
+
+            function attachChangeButton() {
+                const changeButton = document.getElementById('changeFileButton');
+                if (changeButton) {
+                    changeButton.addEventListener('click', function(event) {
+                        event.stopPropagation();
+                        fileInput.value = '';
+                        uploadContent.innerHTML = `
+                        <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-300" fill="none"
+                             stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M7 16V4m0 0L3 8m4-4l4 4M17 8v12m0 0l4-4m-4 4l-4-4"/>
+                        </svg>
+                        <p class="mb-2 text-sm text-gray-500 dark:text-gray-300">
+                            <span class="font-semibold">Click to upload</span> or drag and drop
+                        </p>
+                        <p class="text-xs text-gray-500 dark:text-gray-300">PDF, Excel, Word, Images up to 10MB</p>
+                    `;
+                    });
+                }
+            }
+        </script>
+
+    </main>
+@endsection
