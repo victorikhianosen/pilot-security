@@ -9,7 +9,7 @@
     <meta content="coderthemes" name="author">
 
     <!-- App favicon -->
-    <link rel="shortcut icon" href="assets/images/favicon.ico">
+    <link rel="icon" href="assets/images/favicon.png" type="image/x-icon" />
 
     <!-- App css -->
     <link href="{{ asset('auth/assets/css/app.min.css') }}" rel="stylesheet" type="text/css">

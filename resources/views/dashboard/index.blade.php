@@ -178,40 +178,41 @@
 
 
         <div class="mt-12 overflow-x-auto">
+                    <h1 class="pb-6 text-lg">NSE Trends</h1>
+
             <table class="min-w-full bg-white">
                 <thead class="bg-gray-800 text-white whitespace-nowrap">
                     <tr>
-                        <th class="p-4 text-left text-sm font-medium">S/N</th>
                         <th class="p-4 text-left text-sm font-medium">Company</th>
-                        <th class="p-4 text-left text-sm font-medium">Pclose</th>
+                        <th class="p-4 text-left text-sm font-medium">Previous Close</th>
                         <th class="p-4 text-left text-sm font-medium">Open</th>
-                        <th class="p-4 text-left text-sm font-medium">Close</th>
-                        <th class="p-4 text-left text-sm font-medium">Change</th>
-                        <th class="p-4 text-left text-sm font-medium">% Change</th>
                         <th class="p-4 text-left text-sm font-medium">High</th>
                         <th class="p-4 text-left text-sm font-medium">Low</th>
+                        <th class="p-4 text-left text-sm font-medium">%Spread</th>
+                        <th class="p-4 text-left text-sm font-medium">Close</th>
+                        <th class="p-4 text-left text-sm font-medium">%Change</th>
                         <th class="p-4 text-left text-sm font-medium">Trades</th>
                         <th class="p-4 text-left text-sm font-medium">Volume</th>
                         <th class="p-4 text-left text-sm font-medium">Value</th>
+
                     </tr>
                 </thead>
                 <tbody class="whitespace-nowrap">
-                    @forelse ($nsePrices as $price)
+                    @forelse ($nsePrices as $item)
                         <tr class="even:bg-blue-50">
-                            <td class="p-4">
-                                {{ ($nsePrices->currentPage() - 1) * $nsePrices->perPage() + $loop->iteration }}
-                            </td>
-                            <td class="p-4">{{ $price->company }}</td>
-                            <td class="p-4">{{ $price->pclose }}</td>
-                            <td class="p-4">{{ $price->open }}</td>
-                            <td class="p-4">{{ $price->close }}</td>
-                            <td class="p-4">{{ $price->change }}</td>
-                            <td class="p-4">{{ $price->percent_change }}</td>
-                            <td class="p-4">{{ $price->high }}</td>
-                            <td class="p-4">{{ $price->low }}</td>
-                            <td class="p-4">{{ $price->trades }}</td>
-                            <td class="p-4">{{ $price->volume }}</td>
-                            <td class="p-4">{{ $price->value }}</td>
+
+                            <td class="p-4">{{ $item->security_name }}</td>
+                            <td class="p-4">{{ $item->previous_close }}</td>
+                            <td class="p-4">{{ $item->open }}</td>
+                            <td class="p-4">{{ $item->high }}</td>
+                            <td class="p-4">{{ $item->low }}</td>
+                            <td class="p-4">{{ $item->spread_pct }}</td>
+                            <td class="p-4">{{ $item->close }}</td>
+                            <td class="p-4">{{ $item->change }}</td>
+                            <td class="p-4">{{ $item->deals }}</td>
+                            <td class="p-4">{{ $item->volume }}</td>
+                            <td class="p-4">{{ $item->value }}</td>
+
                         </tr>
                     @empty
                         <tr>

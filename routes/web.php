@@ -24,9 +24,7 @@ Route::get('eft', [PageController::class, 'ETF'])->name('eft');
 Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::get('', [DashboardController::class, 'dashboard'])->name('dashboard');
     Route::post('upload/pricing', [DashboardController::class, 'extractPricing'])->name('upload.pricing');
-
-
-    Route::get('nse/lists', [DashboardController::class, 'nseIndex'])->name('nse.index');
+    Route::get('nse/lists', [DashboardController::class, 'adminNse'])->name('nse');
 
 
 

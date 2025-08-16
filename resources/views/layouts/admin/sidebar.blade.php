@@ -4,13 +4,13 @@
             <a href="index.html" class="logo-box">
                 <!-- Light Brand Logo -->
                 <div class="logo-light">
-                    <img src="assets/images/logo-light.png" class="logo-lg h-6" alt="Light logo">
+                    <img src="{{ asset('assets/images/logo-2.png') }}" class="logo-lg h-6" alt="Light logo">
                     <img src="assets/images/logo-sm.png" class="logo-sm" alt="Small logo">
                 </div>
 
                 <!-- Dark Brand Logo -->
                 <div class="logo-dark">
-                    <img src="assets/images/logo-dark.png" class="logo-lg h-6" alt="Dark logo">
+                    <img src="assets/images/logo-2.png" class="logo-lg h-6" alt="Dark logo">
                     <img src="assets/images/logo-sm.png" class="logo-sm" alt="Small logo">
                 </div>
             </a>
@@ -33,16 +33,14 @@
                         </a>
                     </li>
 
-                    <li class="menu-title">Apps</li>
+                    <li class="menu-title">Markets</li>
 
-
-
-                     {{-- <li class="menu-item">
+                     <li class="menu-item">
                         <a href="{{ route('admin.nse') }}" class="menu-link">
                             <span class="menu-icon"><i class="mgc_home_3_line"></i></span>
-                            <span class="menu-text">NSE List </span>
+                            <span class="menu-text">NSE Trends </span>
                         </a>
-                    </li> --}}
+                    </li>
 
 
 

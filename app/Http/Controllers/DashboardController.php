@@ -13,6 +13,7 @@ use Illuminate\Support\Str;
 use App\Models\GainerEquity;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpSpreadsheet\IOFactory;
@@ -22,10 +23,24 @@ class DashboardController extends Controller
 {
     public function dashboard()
     {
-        $nsePrices = NsePrice::latest()->paginate(10);
+        $nsePrices = NsePrice::orderByRaw("CASE WHEN LOWER(security_name) = 'total' THEN 1 ELSE 0 END")
+            ->orderBy('security_name', 'asc')
+            ->paginate(10);
         $totalCustomers = NsePrice::count();
 
         return view('dashboard.index', compact('nsePrices', 'totalCustomers'));
+    }
+
+
+    public function adminNse()
+    {
+        $nsePrices = NsePrice::orderByRaw("CASE WHEN LOWER(security_name) = 'total' THEN 1 ELSE 0 END")
+            ->orderBy('security_name', 'asc')
+            ->paginate(3);
+
+        return view('dashboard.nse', [
+            'nsePrices' => $nsePrices,
+        ]);
     }
 
 
@@ -66,6 +81,8 @@ class DashboardController extends Controller
         $tradeDate = $this->resolveTradeDate($request->input('date'), $firstSheet); // 'Y-m-d' or null
 
         // 5) Insert (upsert) into DB
+// 5) Delete existing rows, then insert (upsert) new ones
+        $this->wipePriceTables(); // <— delete everything first
         [$nseCount, $etfCount, $bondCount] = $this->persistBuckets($combined, $tradeDate);
 
         // 6) Cleanup + log
@@ -84,6 +101,15 @@ class DashboardController extends Controller
         return back()->with('success', 'Pricing data extracted successfully');
 
     }
+
+    private function wipePriceTables(): void
+    {
+
+        DB::table((new NsePrice)->getTable())->delete();
+        DB::table((new EtfPrice)->getTable())->delete();
+        DB::table((new BondPrice)->getTable())->delete();
+    }
+
 
     /** Merge two bucket sets: keep the first header we see and append data rows. */
     private function mergeBuckets(array $base, array $add): array

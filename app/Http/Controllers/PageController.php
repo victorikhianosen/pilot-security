@@ -43,19 +43,26 @@ class PageController extends Controller
 }
 
 
-    public function ETF()
-    {
-        $EtfPrice = EtfPrice::orderBy('security_name', 'asc')->paginate(20);
-        return view('pages.etf', [
-            'etfPrices' => $EtfPrice
-        ]);
-    }
+ public function ETF()
+{
+    $etfPrices = EtfPrice::orderByRaw(
+            "CASE WHEN LOWER(security_name) REGEXP '^(total|grand total)' THEN 1 ELSE 0 END"
+        )
+        ->orderBy('security_name', 'asc')
+        ->paginate(20);
 
-    public function bonds()
-    {
-        $bondPrice = BondPrice::orderBy('security_name', 'asc')->paginate(20);
-        return view('pages.bonds', [
-            'bondPrices' => $bondPrice
-        ]);
-    }
+    return view('pages.etf', ['etfPrices' => $etfPrices]);
+}
+
+public function bonds()
+{
+    $bondPrices = BondPrice::orderByRaw(
+            "CASE WHEN LOWER(security_name) REGEXP '^(total|grand total)' THEN 1 ELSE 0 END"
+        )
+        ->orderBy('security_name', 'asc')
+        ->paginate(20);
+
+    return view('pages.bonds', ['bondPrices' => $bondPrices]);
+}
+
 }

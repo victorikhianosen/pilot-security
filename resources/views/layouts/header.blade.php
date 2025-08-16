@@ -45,16 +45,7 @@
       <div class="layer layer-three"><span class="overlay"></span></div>
     </div>
 
-    <!-- page-direction -->
-    <div class="page_direction">
-      <div class="demo-rtl direction_switch">
-        <button class="rtl">RTL</button>
-      </div>
-      <div class="demo-ltr direction_switch">
-        <button class="ltr">LTR</button>
-      </div>
-    </div>
-    <!-- page-direction end -->
+
 
     <!-- main header -->
     <header class="main-header style-two">
@@ -63,7 +54,7 @@
           <div class="upper-inner clearfix">
             <div class="logo-box pull-left">
               <figure class="logo">
-                <a href="index.html"
+                <a href="{{ route('home') }}"
                   ><img src="assets/images/logo-2.png" alt=""
                 /></a>
               </figure>

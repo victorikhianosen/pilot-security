@@ -35,10 +35,9 @@
                 <div class="card overflow-hidden sm:rounded-md rounded-none">
                     <div class="p-6">
                         <a href="{{ url('/') }}" class="block mb-8">
-                            <img class="h-6 block dark:hidden" src="{{ asset('assets/images/logo-dark.png') }}"
+                            <img class="h-6 block dark:hidden" src="{{ asset('assets/images/logo-2.png') }}"
                                 alt="Pilot Securities Logo">
-                            <img class="h-6 hidden dark:block" src="{{ asset('assets/images/logo-light.png') }}"
-                                alt="Pilot Securities Logo">
+                       
                         </a>
 
                         <form action="{{ route('login.store') }}" method="post">
